@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Caption Generator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            width: 800px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .left {
+            width: 50%;
+            background: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid #eee;
+        }
+
+        .left img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .right {
+            width: 50%;
+            padding: 30px;
+            text-align: center;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .caption-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f8e9;
+            border-left: 5px solid #4CAF50;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT SIDE: IMAGE -->
+    <div class="left">
+        <img id="imageDisplay"
+             src="{% if image_url %}{{ image_url }}{% endif %}"
+             alt="Preview">
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right">
+        <h2>🖼️ Image Caption Generator</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file"
+                   name="image"
+                   accept="image/*"
+                   onchange="handleImageChange(event)"
+                   required>
+
+            <button type="submit">Generate Caption</button>
+        </form>
+
+        {% if caption %}
+            <div class="caption-box" id="captionBox">
+                <strong>Caption:</strong>
+                <p>{{ caption }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+function handleImageChange(event) {
+    const img = document.getElementById('imageDisplay');
+    const captionBox = document.getElementById('captionBox');
+
+    // Show image preview immediately
+    img.src = URL.createObjectURL(event.target.files[0]);
+
+    // Remove old caption when new image is selected
+    if (captionBox) {
+        captionBox.remove();
+    }
+}
+</script>
+
+</body>
+</html>
