@@ -35,3 +35,6 @@ def upload_image(request):
         'caption': caption,
         'image_url': image_url
     })
+
+
+    
